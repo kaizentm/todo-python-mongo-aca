@@ -6,10 +6,8 @@ param tags object
 param apiImageName string = ''
 param webImageName string = ''
 
-var abbrs = loadJsonContent('abbreviations.json')
-
 resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2022-03-01' = {
-  name: '${abbrs.appManagedEnvironments}${resourceToken}'
+  name: 'cae-${resourceToken}'
   location: location
   tags: tags
   properties: {
@@ -25,7 +23,7 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2022-03-01'
 
 // 2022-02-01-preview needed for anonymousPullEnabled
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' = {
-  name: '${abbrs.containerRegistryRegistries}${resourceToken}'
+  name: 'contreg${resourceToken}'
   location: location
   tags: tags
   sku: {
@@ -45,7 +43,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-pr
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
-  name: '${abbrs.keyVaultVaults}${resourceToken}'
+  name: 'keyvault${resourceToken}'
   location: location
   tags: tags
   properties: {
@@ -83,8 +81,8 @@ resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-1
   }
 }
 
-module applicationInsightsResources 'applicationinsights.bicep' = {
-  name: 'applicationinsights-resources'
+module applicationInsightsResources './applicationinsights.bicep' = {
+  name: 'applicationinsights-${resourceToken}'
   params: {
     resourceToken: resourceToken
     location: location
@@ -93,8 +91,8 @@ module applicationInsightsResources 'applicationinsights.bicep' = {
   }
 }
 
-module api 'api.bicep' = {
-  name: 'api-resources'
+module api './api.bicep' = {
+  name: 'api-resources-${resourceToken}'
   params: {
     name: name
     location: location
@@ -108,8 +106,8 @@ module api 'api.bicep' = {
   ]
 }
 
-module web 'web.bicep' = {
-  name: 'web-resources'
+module web './web.bicep' = {
+  name: 'web-resources-${resourceToken}'
   params: {
     name: name
     location: location
@@ -125,7 +123,7 @@ module web 'web.bicep' = {
 }
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
-  name: '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
+  name: 'log-${resourceToken}'
   location: location
   tags: tags
   properties: any({
@@ -140,7 +138,7 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06
 }
 
 resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-10-15' = {
-  name: '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
+  name: 'cosmos-${resourceToken}'
   kind: 'MongoDB'
   location: location
   tags: tags
