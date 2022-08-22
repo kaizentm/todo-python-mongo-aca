@@ -17,13 +17,13 @@ The following prerequisites are required to use this application. Please ensure 
 - [Azure Developer CLI](https://aka.ms/azure-dev/install)
   - Windows:
     ```powershell
-    powershell -c "Set-ExecutionPolicy Bypass Process -Force; irm 'https://aka.ms/install-azd.ps1' | iex"
+    powershell -ex AllSigned -c "Invoke-RestMethod 'https://aka.ms/install-azd.ps1' | Invoke-Expression"
     ```
   - Linux/MacOS:
     ```
     curl -fsSL https://aka.ms/install-azd.sh | bash
     ```
-- [Azure CLI (2.30.0+)](https://docs.microsoft.com/cli/azure/install-azure-cli)
+- [Azure CLI (2.38.0+)](https://docs.microsoft.com/cli/azure/install-azure-cli)
 - [Python (3.8+)](https://www.python.org/downloads/) - for the API backend
 - [Node.js with npm (16.13.1+)](https://nodejs.org/) - for the Web frontend
 - [Docker](https://docs.docker.com/get-docker/)
@@ -43,7 +43,7 @@ azd up --template todo-python-mongo-aca
 
 You will be prompted for the following information:
 
-- `Environment Name`: This will be used as a prefix for all your Azure resources, make sure it is globally unique and under 15 characters.
+- `Environment Name`: This will be used as a prefix for the resource group that will be created to hold all Azure resources. This name should be unique within your Azure subscription.
 - `Azure Location`: The Azure location where your resources will be deployed.
 - `Azure Subscription`: The Azure Subscription where your resources will be deployed.
 
@@ -121,12 +121,16 @@ The Azure Developer experience includes an Azure Developer CLI VS Code Extension
 
 Here's how to install it:
 
-1. Download the extension from https://aka.ms/azure-dev/vsix
-1. In VS Code:
-    - Open "Extensions" (Ctrl+Shift+X)
-    - Click the ... menu at top of Extensions sidebar
-    - Click "Install from VSIX"
-    - Select location of downloaded file
+#### VS Code
+
+1. Click on the "Extensions" tab in VS Code
+1. Search for "Azure Developer CLI" - authored by Microsoft
+1. Click "Install"
+
+#### Marketplace
+
+1. Go to the [Azure Developer CLI - VS Code Extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.azure-dev) page
+1. Click "Install"
 
 Once the extension is installed, you can press `F1`, and type "Azure Developer CLI" to see all of your available options. You can also right click on your project's `azure.yaml` file for a list of commands.
 
@@ -215,7 +219,7 @@ To uninstall the Azure Developer CLI:
 Windows:
 
 ```
-powershell -c "Set-ExecutionPolicy Bypass Process -Force; irm 'https://aka.ms/uninstall-azd.ps1' | iex"
+powershell -ex AllSigned -c "Invoke-RestMethod 'https://aka.ms/uninstall-azd.ps1' | Invoke-Expression"
 ```
 
 Linux/MacOS:
